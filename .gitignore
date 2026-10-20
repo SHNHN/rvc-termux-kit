@@ -1,0 +1,50 @@
+# ---- 模型（第三方资源，绝不入库）----
+models/*
+!models/.gitkeep
+*.pth
+*.index
+*.pt
+!engine/**/*.pt
+
+# ---- 引擎（从上游获取，不入库）----
+engine/*
+!engine/.gitkeep
+
+# ---- 用户音频（隐私 + 体积）----
+inbox/*
+!inbox/.gitkeep
+done/*
+!done/.gitkeep
+out/*
+!out/.gitkeep
+*.wav
+*.mp3
+*.flac
+*.m4a
+*.aac
+*.ogg
+*.opus
+
+# ---- 运行时产物 ----
+.work/
+*.log
+*.tmp
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+venv/
+pip-wheel-metadata/
+
+# ---- 编辑器 / 系统 ----
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~
+
+# ---- 本地配置（可能含个人路径）----
+config/config.local.ini

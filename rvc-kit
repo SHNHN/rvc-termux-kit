@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# ============================================================
+#  rvc-kit - 统一入口
+#
+#    ./rvc-kit                 看状态
+#    ./rvc-kit convert <文件>  转换
+#    ./rvc-kit watch           监听 inbox/
+#    ./rvc-kit models list     看已装模型 / 装新模型
+#    ./rvc-kit mix ...         混音
+#    ./rvc-kit split ...       从原曲分离伴奏
+#    ./rvc-kit trim ...        剪掉音频尾部静音
+#    ./rvc-kit doctor          环境自检
+#    ./rvc-kit help            完整帮助
+# ============================================================
+set -u
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+S="$HERE/scripts"
+
+cmd="${1:-}"
+[ $# -gt 0 ] && shift
+
+case "$cmd" in
+  ""|status|st)        exec bash "$S/convert.sh" --status ;;
+  convert|conv|c)      exec bash "$S/convert.sh" "$@" ;;
+  all|a)               exec bash "$S/convert.sh" --all ;;
+  watch|w)             exec bash "$S/watch.sh" "$@" ;;
+  mix|m)               exec bash "$S/mix.sh" "$@" ;;
+  models|mdl)          exec bash "$S/models.sh" "$@" ;;
+  split|s)             exec bash "$S/split.sh" "$@" ;;
+  trim|t)              exec bash "$S/trim.sh" "$@" ;;
+  install|i)           exec bash "$S/install.sh" "$@" ;;
+  doctor|d)            exec bash "$S/doctor.sh" "$@" ;;
+  help|-h|--help)
+    sed -n '2,14p' "$0" | sed 's/^#  \{0,2\}//'
+    echo
+    echo "  子命令详情："
+    for f in convert watch models mix split fmt install doctor; do
+      [ -f "$S/$f.sh" ] && echo "  ── $f ──" && sed -n '2,8p' "$S/$f.sh" | sed 's/^#  \{0,2\}/    /'
+    done
+    ;;
+  *)
+    echo "未知子命令：$cmd" >&2
+    echo "跑 ./rvc-kit help 看用法" >&2
+    exit 2
+    ;;
+esac
